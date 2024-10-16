@@ -60,12 +60,12 @@ Description:
 Este es un manipulador privado que solo puede ser llamado desde funciones o metodos de la libreria.
 */
 private handler getClipboardManager() returns JObject
-    variable tContext as JObject
-   
-    unsafe
-        put ApplicationContext() into tContext
-        return _JNI_getClipboardManager(tContext, StringToJString(kCLIPBOARD_SERVICE))
-    end unsafe
+	variable tContext as JObject
+
+	unsafe
+		put ApplicationContext() into tContext
+		return _JNI_getClipboardManager(tContext, StringToJString(kCLIPBOARD_SERVICE))
+	end unsafe
 end handler
 
 /**
@@ -84,12 +84,12 @@ Description:
 Puedes utilizar el manipulador <hasClipboardText> para comprobar si es necesario llamar al objeto ClipData por el contenido del portapapeles.
 */
 public handler hasClipboardText() returns Boolean
-    variable tClipboardManager as JObject
+	variable tClipboardManager as JObject
 
-    unsafe
-        put getClipboardManager() into tClipboardManager
-        return _JNI_hasPrimaryClip(tClipboardManager)
-    end unsafe
+	unsafe
+		put getClipboardManager() into tClipboardManager
+		return _JNI_hasPrimaryClip(tClipboardManager)
+	end unsafe
 end handler
 
 /**
@@ -108,12 +108,12 @@ Description:
 Puedes utilizar el manipulador <clearPrimaryClip()> para borrar el contenido del portapapeles.
 */
 public handler clearPrimaryClip() returns nothing
-    variable tClipboardManager as JObject
+	variable tClipboardManager as JObject
 
-    unsafe
-        put getClipboardManager() into tClipboardManager
-        return _JNI_clearPrimaryClip(tClipboardManager)
-    end unsafe
+	unsafe
+		put getClipboardManager() into tClipboardManager
+		return _JNI_clearPrimaryClip(tClipboardManager)
+	end unsafe
 end handler
 
 /**
@@ -132,20 +132,20 @@ Description:
 Puedes utilizar el manipulador <getClipboardText> para obtener el contenido de tipo texto del portapapeles.
 */
 public handler getClipboardText() returns String
-    variable tClipboardManager as JObject
-    variable tClipData as JObject
-    variable tItem as JObject
-    variable tText as JString
-	    
-    unsafe
-        put getClipboardManager() into tClipboardManager
-        put _JNI_getPrimaryClip(tClipboardManager) into tClipData
+	variable tClipboardManager as JObject
+	variable tClipData as JObject
+	variable tItem as JObject
+	variable tText as JString
+		
+	unsafe
+		put getClipboardManager() into tClipboardManager
+		put _JNI_getPrimaryClip(tClipboardManager) into tClipData
 
-        put _JNI_getItemAt(tClipData, 0) into tItem
-        put _JNI_getText(tItem) into tText
-        
-        return StringFromJString(tText)
-    end unsafe
+		put _JNI_getItemAt(tClipData, 0) into tItem
+		put _JNI_getText(tItem) into tText
+		
+		return StringFromJString(tText)
+	end unsafe
 end handler
 
 /**
@@ -165,15 +165,15 @@ Description:
 El manipulador <setClipboardText()> se utiliza para insertar una cada de texto en el portapapeles del sistema y luego utilizarlo desde otra aplicación.
 */
 public handler setClipboardText(in pText as String) returns nothing
-    variable tClipboardManager as JObject
-    variable tClipData as JObject
+	variable tClipboardManager as JObject
+	variable tClipData as JObject
 
-    unsafe    
-        put getClipboardManager() into tClipboardManager        
-        put _JNI_newPlainText(StringToJString("simple text"), StringToJString(pText)) into tClipData
+	unsafe    
+		put getClipboardManager() into tClipboardManager        
+		put _JNI_newPlainText(StringToJString("simple text"), StringToJString(pText)) into tClipData
 
-        _JNI_setPrimaryClip(tClipboardManager, tClipData)
-    end unsafe
+		_JNI_setPrimaryClip(tClipboardManager, tClipData)
+	end unsafe
 end handler
 
 end library
