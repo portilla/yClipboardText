@@ -1,9 +1,0 @@
-import module cu.tgraf.clipboardtext
-  use com.livecode.java
-  use com.livecode.foreign
-  use com.livecode.library.androidutils
-  handler hasClipboardText() returns Boolean
-  handler clearPrimaryClip() returns nothing
-  handler getClipboardText() returns String
-  handler setClipboardText(in pText as String) returns nothing
-end module
