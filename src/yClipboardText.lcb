@@ -125,6 +125,8 @@ Description:
 Use the <clearPrimaryClip> command to clear the <clipboard(glossary)>
 contents in Android.
 
+Synonyms: clearClipboard, resetClipboard
+
 type: command
 */
 public handler clearPrimaryClip() returns nothing
@@ -136,6 +138,13 @@ public handler clearPrimaryClip() returns nothing
 	end unsafe
 end handler
 
+public handler clearClipboard() returns nothing
+	clearPrimaryClip()
+end handler
+
+public handler resetClipboard() returns nothing
+	clearPrimaryClip()
+end handler
 
 /**
 Syntax: getClipboardText()
