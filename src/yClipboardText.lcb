@@ -104,6 +104,10 @@ type: function
 public handler hasClipboardText() returns Boolean
 	variable tClipboardManager as JObject
 
+	if the operating system is not "android" then
+		return false
+	end if
+
 	unsafe
 		put getClipboardManager() into tClipboardManager
 		return _JNI_hasPrimaryClip(tClipboardManager)
@@ -131,6 +135,10 @@ type: command
 */
 public handler clearPrimaryClip() returns nothing
 	variable tClipboardManager as JObject
+
+	if the operating system is not "android" then
+		return nothing
+	end if
 
 	unsafe
 		put getClipboardManager() into tClipboardManager
@@ -170,6 +178,10 @@ public handler getClipboardText() returns String
 	variable tItem as JObject
 	variable tText as JString
 
+	if the operating system is not "android" then
+		return ""
+	end if
+
 	unsafe
 		put getClipboardManager() into tClipboardManager
 		put _JNI_getPrimaryClip(tClipboardManager) into tClipData
@@ -205,6 +217,10 @@ type: command
 public handler setClipboardText(in pText as String) returns nothing
 	variable tClipboardManager as JObject
 	variable tClipData as JObject
+
+	if the operating system is not "android" then
+		return nothing
+	end if
 
 	unsafe
 		put getClipboardManager() into tClipboardManager
