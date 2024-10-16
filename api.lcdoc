@@ -1,0 +1,107 @@
+Library: cu.tgraf.clipboardtext
+
+Type: library
+
+Summary:
+Librería que contiene dos funciones básicas, una para acceder al contenido de tipo Texto que se encuentra
+en el portapapeles y otra para enviar al portapapeles un contenido de tipo texto y ser utilizado desde
+una aplicación externa.
+
+Platforms: android
+
+Description:
+La librería permite acceder mediantes las funciones al portapapeles, así como depositar contenido en el mismo, posibilitando 
+utilizar desde LiveCode script para insertar el texto copiado desde una aplicación externa en una propiedad valida de un objeto
+LiveCode o variable, así como copiar un texto seleccionado de un campo texto para ser utilizado en una apliación externa.
+
+version: 1.0.0
+
+author: TGraf - Tecnologia y Grafica
+
+
+Name: setClipboardText
+
+Type: handler
+
+Syntax: setClipboardText(<pText>)
+
+Summary: Permite enviar una cadena de texto para el portapapeles del sistema.
+
+Platforms: android
+
+Example: setClipboardText()
+
+Parameters: 
+
+pText: La cadena de tipo texto a insertar en el portapapeles
+
+Returns: En the result si está vacío se ejecutó con éxito la función. De lo contrario puede manipular el error en the result. Todo ello desde LiveCode Script
+
+Description: El manipulador <setClipboardText()> se utiliza para insertar una cada de texto en el portapapeles del sistema y luego utilizarlo desde otra aplicación.
+
+
+
+
+Name: clearPrimaryClip
+
+Type: handler
+
+Syntax: clearPrimaryClip()
+
+Summary: Permite borrar el contenido del portapapeles.
+
+Platforms: android
+
+Example: clearPrimaryClip()
+
+Parameters: Ninguno
+
+Returns: Devuelve empty si la operacion se ejecuto satisfactoriamente.
+
+Description: Puedes utilizar el manipulador <clearPrimaryClip()> para borrar el contenido del portapapeles.
+
+
+
+
+Name: getClipboardText
+
+Type: handler
+
+Syntax: getClipboardText()
+
+Summary: Permite obtener el contenido de tipo texto del portapapeles.
+
+Platforms: android
+
+Example: getClipboardText()
+
+Parameters: Ninguno
+
+Returns: Devuelve el texto que se encuentra en el portapapeles o vacio si en el portapapeles no hay contenido de tipo texto.
+
+Description: Puedes utilizar el manipulador <getClipboardText> para obtener el contenido de tipo texto del portapapeles.
+
+
+
+
+Name: hasClipboardText
+
+Type: handler
+
+Syntax: hasClipboardText()
+
+Summary: Permite comprobar si existe contenido en el portapapeles.
+
+Platforms: android
+
+Example: hasClipboardText()
+
+Parameters: Ninguno
+
+Returns: Devuelve true si existe contenido en el portapapeles y false en caso contrario.
+
+Description: Puedes utilizar el manipulador <hasClipboardText> para comprobar si es necesario llamar al objeto ClipData por el contenido del portapapeles.
+
+
+
+

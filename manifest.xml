@@ -1,0 +1,15 @@
+<package version="0.0">
+  <name>cu.tgraf.clipboardtext</name>
+  <title>ClipBoard Text</title>
+  <author>TGraf - Tecnologia y Grafica</author>
+  <version>1.0.0</version>
+  <license>community</license>
+  <type>library</type>
+  <requires name="com.livecode.java"/>
+  <requires name="com.livecode.foreign"/>
+  <requires name="com.livecode.library.androidutils"/>
+  <handler name="hasClipboardText" parameters="" return="boolean"/>
+  <handler name="clearPrimaryClip" parameters="" return="nothing"/>
+  <handler name="getClipboardText" parameters="" return="string"/>
+  <handler name="setClipboardText" parameters="in string" return="nothing"/>
+</package>
