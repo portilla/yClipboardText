@@ -1,0 +1,254 @@
+/* Library to access clipboard content as well as send content.
+ *
+ * Developed by Yunior Portilla Rodriguez
+ * Creation date: 15/10/2024
+ * Update date: 16/10/2024
+ * 
+ * NOTE: This library currently only allows access to text-type information
+ * on the clipboard. 
+ * 
+ * LICENSE: This library is licensed under (GPL-3.0) see the LICENSE file
+ * found in the repository of this project.*/
+
+/**
+This library provides access to the clipboard text functionality in Android.
+
+Description:
+This library allows you to access the clipboard as well as set content on it.
+This provides the ability to use LiveCode Script to insert text copied 
+from an external application into a valid property of a LiveCode object or
+variable, as well as copy selected text from a text field to be used in an
+external application.
+
+Tags: clipBoard, android, text
+*/
+
+library cu.tgraf.clipboardtext
+
+/*******************************************************************************
+ *
+ *	MARK: METADATAS
+ *
+ ******************************************************************************/
+
+metadata version is "1.0.0"
+metadata author is "TGraf - Tecnologia y Grafica"
+metadata title is "ClipBoard Text"
+metadata svgIcon is "M23.33585,199.99999h58.33333c1.84,0 3.33333,-1.49333 3.33333,-3.33333c0,-1.84 -1.49333,-3.33333 -3.33333,-3.33333h-58.33333c-2.75333,0 -5,-2.24667 -5,-5v-156.66666c0,-2.75333 2.24667,-5 5,-5h21.66667v3.33333c0,1.84 1.49333,3.33333 3.33333,3.33333h73.33333c1.84,0 3.33333,-1.49333 3.33333,-3.33333v-3.33333h21.66667c2.75333,0 5,2.24667 5,5v71.66667c0,1.84 1.49333,3.33333 3.33333,3.33333c1.84,0 3.33333,-1.49333 3.33333,-3.33333v-71.66667c0,-6.43333 -5.23333,-11.66667 -11.66667,-11.66667h-22c-1.54667,-7.6 -8.28,-13.33333 -16.33333,-13.33333h-11.82667c-2.36,-4.06 -6.72667,-6.66667 -11.50667,-6.66667c-4.78,0 -9.14667,2.60667 -11.50667,6.66667h-11.82667c-8.05333,0 -14.78,5.73333 -16.33333,13.33333h-22c-6.43333,0 -11.66667,5.23333 -11.66667,11.66667v156.66666c0,6.43333 5.23333,11.66667 11.66667,11.66667zM118.33585,199.99999c0.88667,0 1.73333,-0.35333 2.35333,-0.98l49.98,-49.98c0.00667,-0.00667 0.01333,-0.00667 0.02,-0.01333c0.00667,-0.00667 0.00667,-0.01333 0.01333,-0.02l16.65333,-16.65333c1.3,-1.3 1.3,-3.41333 0,-4.71333l-16.66667,-16.66667c-1.3,-1.3 -3.41333,-1.3 -4.71333,0l-66.66667,66.66667c-0.62,0.62667 -0.97333,1.47333 -0.97333,2.36v16.66667c0,1.84 1.49333,3.33333 3.33333,3.33333zM61.66919,13.33333h13.94c1.41333,0 2.67333,-0.88667 3.14,-2.21333c0.95333,-2.66 3.46667,-4.45333 6.25333,-4.45333c2.78667,0 5.3,1.79333 6.24667,4.45333c0.47333,1.32667 1.72667,2.21333 3.14,2.21333h13.94667c5.51333,0 10,4.48667 10,10v3.33333h-66.66667v-3.33333c0,-5.51333 4.48667,-10 10,-10zM168.33585,141.95332l-11.95333,-11.95333l11.95333,-11.95333l11.95333,11.95333zM116.95585,193.33332h-11.95333v-11.95333l46.66667,-46.66667l11.95333,11.95333z"
+metadata os is "android"
+metadata platforms is "mobile"
+
+/*******************************************************************************
+ *
+ *	MARK: USES
+ *
+ ******************************************************************************/
+
+use com.livecode.foreign
+use com.livecode.java
+use com.livecode.library.androidutils
+
+/*******************************************************************************
+ *
+ *	MARK: CONSTANTS
+ *
+ ******************************************************************************/
+
+constant kCLIPBOARD_SERVICE is "clipboard"
+
+/*******************************************************************************
+ *
+ *	MARK: FOREIGN HANDLERS
+ *
+ ******************************************************************************/
+
+__safe foreign handler _JNI_getClipboardManager(in pContext as JObject, in pClipboardService as JString) returns JObject binds to "java:android.content.Context>getSystemService(Ljava/lang/String;)Ljava/lang/Object;"
+
+__safe foreign handler _JNI_hasPrimaryClip(in pClipboardManager as JObject) returns JBoolean binds to "java:android.content.ClipboardManager>hasPrimaryClip()Z"
+__safe foreign handler _JNI_clearPrimaryClip(in pClipboardManager as JObject) returns nothing binds to "java:android.content.ClipboardManager>clearPrimaryClip()V"
+
+__safe foreign handler _JNI_getPrimaryClip(in pClipboardManager as JObject) returns JObject binds to "java:android.content.ClipboardManager>getPrimaryClip()Landroid/content/ClipData;"
+__safe foreign handler _JNI_getItemAt(in pClipData as JObject, in pIndex as JInt) returns JObject binds to "java:android.content.ClipData>getItemAt(I)Landroid/content/ClipData$Item;"
+
+__safe foreign handler _JNI_getText(in pItem as JObject) returns JString binds to "java:android.content.ClipData$Item>getText()Ljava/lang/CharSequence;"
+
+__safe foreign handler _JNI_newPlainText(in pLabel as JString, in pText as JString) returns JObject binds to "java:android.content.ClipData>newPlainText(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Landroid/content/ClipData;!static"
+__safe foreign handler _JNI_setPrimaryClip(in pClipboardManager as JObject, in pClipData as JObject) returns nothing binds to "java:android.content.ClipboardManager>setPrimaryClip(Landroid/content/ClipData;)V"
+
+/*******************************************************************************
+ *
+ *	MARK: PUBLIC HANDLERS
+ *
+ ******************************************************************************/
+
+
+/**
+Syntax: hasClipboardText()
+
+Example:
+if hasClipboardText() then
+	put getClipboardText() into tClipboardText
+end if
+
+Summary: Checks if content exists on the clipboard in Android.
+
+Description:
+Use the <hasClipboardText> function to check whether the <clipboard(glossary)>
+is empty or not.
+
+Returns (bolean): Returns `true` if there is content on 
+the <clipboard(glossary)> and `false` otherwise.
+
+type: function
+*/
+public handler hasClipboardText() returns Boolean
+	variable tClipboardManager as JObject
+
+	if the operating system is not "android" then
+		return false
+	end if
+
+	unsafe
+		put getClipboardManager() into tClipboardManager
+		return _JNI_hasPrimaryClip(tClipboardManager)
+	end unsafe
+end handler
+
+
+/**
+Syntax: clearPrimaryClip
+
+Example:
+if not hasClipboardText() then
+	clearPrimaryClip
+end if
+
+Summary: Clear clipboard content on Android.
+
+Description:
+Use the <clearPrimaryClip> command to clear the <clipboard(glossary)>
+contents in Android.
+
+Synonyms: clearClipboard, resetClipboard
+
+type: command
+*/
+public handler clearPrimaryClip() returns nothing
+	variable tClipboardManager as JObject
+
+	if the operating system is not "android" then
+		return nothing
+	end if
+
+	unsafe
+		put getClipboardManager() into tClipboardManager
+		return _JNI_clearPrimaryClip(tClipboardManager)
+	end unsafe
+end handler
+
+public handler clearClipboard() returns nothing
+	clearPrimaryClip()
+end handler
+
+public handler resetClipboard() returns nothing
+	clearPrimaryClip()
+end handler
+
+/**
+Syntax: getClipboardText()
+
+Example:
+if hasClipboardText() then
+	put getClipboardText() into tClipboardText
+end if
+
+Summary: Allows you to get the text that is in the clipboard on Android.
+
+Description:
+Use the <getClipboardText> function to get <clipboard(glossary)> text in Android.
+
+Returns (string): Returns the text currently on the Android clipboard,
+or empty if the clipboard contains no text.
+
+type: function
+*/
+public handler getClipboardText() returns String
+	variable tClipboardManager as JObject
+	variable tClipData as JObject
+	variable tItem as JObject
+	variable tText as JString
+
+	if the operating system is not "android" then
+		return ""
+	end if
+
+	unsafe
+		put getClipboardManager() into tClipboardManager
+		put _JNI_getPrimaryClip(tClipboardManager) into tClipData
+
+		put _JNI_getItemAt(tClipData, 0) into tItem
+		put _JNI_getText(tItem) into tText
+
+		return StringFromJString(tText)
+	end unsafe
+end handler
+
+
+/**
+Syntax: setClipboardText <pText>
+
+Example:
+setClipboardText the text of field "Shared Text"
+
+Summary: Put a text string on the Android clipboard.
+
+Parameters: 
+pText (string): The text string that is inserted into the Android clipboard.
+
+Description:
+Use the <setClipboardText> command to copy a piece of text to the Android 
+clipboard so that you can then use it from another application.
+
+Returns: In the result if it is empty the function was executed successfully.
+Otherwise you can manipulate the error in `the result`.
+
+type: command
+*/
+public handler setClipboardText(in pText as String) returns nothing
+	variable tClipboardManager as JObject
+	variable tClipData as JObject
+
+	if the operating system is not "android" then
+		return nothing
+	end if
+
+	unsafe
+		put getClipboardManager() into tClipboardManager
+		put _JNI_newPlainText(StringToJString("simple text"), StringToJString(pText)) into tClipData
+
+		_JNI_setPrimaryClip(tClipboardManager, tClipData)
+	end unsafe
+end handler
+
+/*******************************************************************************
+ *
+ *	MARK: PRIVATE HANDLERS
+ *
+ ******************************************************************************/
+
+/* Description: 
+ * Allows you to get the ClipBoardManager clipboard object to manage 
+ * the clipboard.
+ *
+ * Returns:
+ * Returns the ClipBoardManager clipboard object for managing the clipboard. */
+private handler getClipboardManager() returns JObject
+	variable tContext as JObject
+
+	unsafe
+		put ApplicationContext() into tContext
+		return _JNI_getClipboardManager(tContext, StringToJString(kCLIPBOARD_SERVICE))
+	end unsafe
+end handler
+
+end library
