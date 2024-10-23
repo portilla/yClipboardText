@@ -1,9 +1,10 @@
 /* Library to access clipboard content as well as send content.
  *
  * Developed by Yunior Portilla Rodriguez
+ * Contributor: Andres del Toro Cruz
  * Creation date: 15/10/2024
  * Update date: 16/10/2024
- * 
+ * Contributor: Andres del Toro Cruz
  * NOTE: This library currently only allows access to text-type information
  * on the clipboard. 
  * 
